@@ -2,7 +2,7 @@
 """
 Agent skeleton. Fill in the gaps.
 """
-class MyAgent(Agent):
+class MyAgent(AlphaBetaAgent):
 
     """This is the skeleton of an agent to play the Penguin game."""
     
