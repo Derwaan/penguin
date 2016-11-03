@@ -88,6 +88,7 @@ def draw_screen():
   if over != None:
     pygame.draw.lines(screen, (0,255,0), True, hexagons[over[0]][over[1]].P, 2)
   # check if the game is over to compute final 
+  scores = None
   if state.game_over():
     # the game is over, update the scores
     for i in range(r):
@@ -97,7 +98,9 @@ def draw_screen():
           value = state.fish[i][j]
           label = end_points_font.render('+' + str(value), 1, (0,0,0))
           screen.blit(label, (hexagons[i][j].center[0] - 20, hexagons[i][j].center[1] - 20))
-          state.scores[state.penguins[i][j]] += value
+    scores = state.get_scores()
+  else:
+    scores = state.scores
   # render scores
   screen.blit(score_lbl, (grid_size[0] + 10, 10))
   dy = 50
@@ -105,7 +108,7 @@ def draw_screen():
     screen.blit(penguins[p], (grid_size[0] + 10, score_lbl.get_rect().height + dy))
     if p == state.cur_player:
       screen.blit(selected_aura, (grid_size[0] + 10, score_lbl.get_rect().height + dy))
-    label = score_points_font.render('fish: ' + str(state.scores[p]) + ' (' + str(state.nb_tiles[p]) + ')', 1, (255,255,255))
+    label = score_points_font.render('fish: ' + str(scores[p]) + ' (' + str(state.nb_tiles[p]) + ')', 1, (255,255,255))
     screen.blit(label, (grid_size[0] + 20, dy))
     dy += penguins[p].get_rect().height
     if player_type[p] != 'human':
