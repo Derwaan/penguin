@@ -12,11 +12,11 @@ class Agent():
     of the game. The must be compute in at most time_left
     seconds.
 
-    state_data: a representation of the state
+    staet: the current state
     time_left: the number of second left
 
     """
-    def get_action(self, state_data, time_left):
+    def get_action(self, state, time_left):
         abstract
 
     def get_name(self):
