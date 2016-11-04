@@ -82,7 +82,7 @@ class PenguinState(State):
     def game_over(self):
         for i in range(self.nb_players):
             actions = self.get_actions(i)
-            if len(self.get_actions(i)) > 0:
+            if len(self.get_actions(i)) > 1 or actions[0] != ('pass'):
                 return False
         return True
 
@@ -111,7 +111,7 @@ class PenguinState(State):
             self.penguins[pos[0]][pos[1]] = self.cur_player
             # update penguin positions
             self.penguin_positions[self.cur_player].add(pos)
-        else:
+        elif action[0] == 'move':
             # movement action
             origin = action[1]
             destination = action[2]
@@ -169,14 +169,6 @@ class PenguinState(State):
             return winners[0]
         return -1
 
-    """
-    Return the state data. This is what is given to the students
-    so that they implement their own state class.
-    """
-    def get_state_data(self):
-        state_copy = self.copy()
-        return (state_copy.fish, state_copy.penguins, state_copy.scores, state_copy.placement_phase, state_copy.cur_player)
-
     ################################
     # METHODS SPECIFIC TO THE GAME #
     ################################
@@ -228,6 +220,8 @@ class PenguinState(State):
                         # compute the possible moves
                         for destination in self.get_moves(i, j):
                             actions.append(('move', (i, j), destination))
+        if len(actions) == 0:
+            actions.append(('pass'))
         return actions
 
     """
@@ -281,9 +275,6 @@ class PenguinState(State):
     def next_player(self):
         if not self.game_over():
             next = (self.cur_player + 1) % self.nb_players
-            if not self.placement_phase:
-                while len(self.get_actions(next)) == 0:
-                    next = (next + 1) % self.nb_players
             return next
         return -1
 
