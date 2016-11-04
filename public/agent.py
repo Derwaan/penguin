@@ -12,7 +12,7 @@ class Agent():
     of the game. The must be compute in at most time_left
     seconds.
 
-    staet: the current state
+    state: the current state
     time_left: the number of second left
 
     """
