@@ -2,6 +2,11 @@
 
 git pull update master
 
-rm -rf resources/
-mv public/* .
-rm -rf public
+if [ -d "public" ]; then
+	rm -rf resources/
+	mv -f public/* .
+	rm -rf public/
+	echo "Update done"
+else
+	echo "No update needed"
+fi
