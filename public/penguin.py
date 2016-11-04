@@ -82,7 +82,6 @@ class PenguinState(State):
     def game_over(self):
         for i in range(self.nb_players):
             actions = self.get_actions(i)
-            print(actions[0])
             if len(self.get_actions(i)) > 1 or actions[0] != ('pass'):
                 return False
         return True
