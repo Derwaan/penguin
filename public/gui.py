@@ -230,7 +230,7 @@ if __name__ == "__main__":
       break
     if player_type[state.cur_player] != 'human':
       if not ai_thinking:
-        action = get_action_threaded(state, agents[state.cur_player], time_left[state.cur_player])
+        action = get_action_threaded(state.copy(), agents[state.cur_player], time_left[state.cur_player])
         start = time.time()
         ai_thinking = True
       elif action != [None]:
