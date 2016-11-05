@@ -310,12 +310,6 @@ class PenguinState(State):
 """
 Generate the initial state.
 """
-def generate_initial_state(nb_rows, fst_row_size, nb_players, nb_penguins_player):
-    return generate_initial_state(nb_rows, fst_row_size, nb_players, nb_penguins_player, None)
-
-"""
-Generate the initial state.
-"""
 def generate_initial_state(nb_rows, fst_row_size, nb_players, nb_penguins_player, seed):
     random.seed(seed)
     # compute the number of cells on the board
