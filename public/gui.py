@@ -135,6 +135,7 @@ def draw_screen():
 if __name__ == "__main__":
   # process the arguments
   parser = argparse.ArgumentParser()
+  parser.add_argument('-s', help='set the seed to generate the initial state')
   parser.add_argument('-q', help='exit at the end', action='store_true')
   parser.add_argument('-t', help='total number of seconds credited to each player')
   parser.add_argument('-r', help='number of rows')
@@ -147,6 +148,8 @@ if __name__ == "__main__":
   args = parser.parse_args()
   # set the time to play
   total_time = int(args.t) if args.t != None else 180
+  # initialize the seed
+  seed = int(args.s) if args.s != None else None
   # set the values
   r = int(args.r) if args.r != None else 8
   c = int(args.c) if args.c != None else 8
@@ -187,7 +190,7 @@ if __name__ == "__main__":
   W = rect.width
   H = rect.height
   # initialize the state
-  state = generate_initial_state(r, c, pl, pe)
+  state = generate_initial_state(r, c, pl, pe, seed)
   # precompute the hexagons
   hexagons = [ [ getHexagon((i, j), W, H) for j in range(c - i % 2) ] for i in range(r) ]
   # compute the size the grid will take on the window
