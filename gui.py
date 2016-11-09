@@ -135,6 +135,7 @@ def draw_screen():
 if __name__ == "__main__":
   # process the arguments
   parser = argparse.ArgumentParser()
+  parser.add_argument('-s', help='set the seed to generate the initial state')
   parser.add_argument('-q', help='exit at the end', action='store_true')
   parser.add_argument('-t', help='total number of seconds credited to each player')
   parser.add_argument('-r', help='number of rows')
@@ -147,6 +148,8 @@ if __name__ == "__main__":
   args = parser.parse_args()
   # set the time to play
   total_time = int(args.t) if args.t != None else 180
+  # initialize the seed
+  seed = int(args.s) if args.s != None else None
   # set the values
   r = int(args.r) if args.r != None else 8
   c = int(args.c) if args.c != None else 8
@@ -187,7 +190,7 @@ if __name__ == "__main__":
   W = rect.width
   H = rect.height
   # initialize the state
-  state = generate_initial_state(r, c, pl, pe)
+  state = generate_initial_state(r, c, pl, pe, seed)
   # precompute the hexagons
   hexagons = [ [ getHexagon((i, j), W, H) for j in range(c - i % 2) ] for i in range(r) ]
   # compute the size the grid will take on the window
@@ -244,43 +247,47 @@ if __name__ == "__main__":
           action = [None]
           time.sleep(wait)
     else:
-      # handle human player
-      # loop over events and update game
-      for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-          # quit the game
-          pygame.quit()
-          sys.exit()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-          clicked = get_selected_cell(r, c, event.pos, hexagons)
-          if not clicked == None:
-            # get coordinates
-            i = clicked[0]
-            j = clicked[1]    
-            # mouse clicked in valid position
-            # check the game phase
-            if state.placement_phase:
-              # placement phase
-              if state.penguins[i][j] == -1 and state.fish[i][j] == 1:
-                # this position is free, add penguin
-                state.apply_action(('place', (i, j)))
-            else:
-              # movement phase
-              if (i, j) in state.penguin_positions[state.cur_player]:
-                # no penguin selected yet
-                if state.penguins[i][j] == state.cur_player:
-                  # this cell contains a penguins of the current player
-                  moves = state.get_moves(i, j)
-                  origin = (i, j)
-              if origin != None:
-                # there is a penguin selected
-                if (i, j) in moves:
-                  # the destination is valid
-                  state.apply_action(('move', origin, (i, j)))
-                  moves = None
-                  origin = None
-        elif event.type == pygame.MOUSEMOTION:
-          over = get_selected_cell(r, c, event.pos, hexagons)
+      actions = state.get_current_player_actions()
+      if len(actions) == 1 and actions[0] == ('pass'):
+        state.apply_action(actions[0])
+      else:
+        # handle human player
+        # loop over events and update game
+        for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+            # quit the game
+            pygame.quit()
+            sys.exit()
+          elif event.type == pygame.MOUSEBUTTONDOWN:
+            clicked = get_selected_cell(r, c, event.pos, hexagons)
+            if not clicked == None:
+              # get coordinates
+              i = clicked[0]
+              j = clicked[1]    
+              # mouse clicked in valid position
+              # check the game phase
+              if state.placement_phase:
+                # placement phase
+                if state.penguins[i][j] == -1 and state.fish[i][j] == 1:
+                  # this position is free, add penguin
+                  state.apply_action(('place', (i, j)))
+              else:
+                # movement phase
+                if (i, j) in state.penguin_positions[state.cur_player]:
+                  # no penguin selected yet
+                  if state.penguins[i][j] == state.cur_player:
+                    # this cell contains a penguins of the current player
+                    moves = state.get_moves(i, j)
+                    origin = (i, j)
+                if origin != None:
+                  # there is a penguin selected
+                  if (i, j) in moves:
+                    # the destination is valid
+                    state.apply_action(('move', origin, (i, j)))
+                    moves = None
+                    origin = None
+          elif event.type == pygame.MOUSEMOTION:
+            over = get_selected_cell(r, c, event.pos, hexagons)
     draw_screen()
     clock.tick(60)
   draw_screen()
