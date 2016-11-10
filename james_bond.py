@@ -39,13 +39,10 @@ class MyAgent(Agent):
         """The evaluate function must return an integer value
         representing the utility function of the board.
         """
+
         scores = state.get_scores()
         other = (self.id + 1) % 2
-        if(scores[self.id] > scores[other]):
-            return 1
-        elif(scores[self.id] < scores[other]):
-            return -1
-        return 0
+        return scores[self.id] - scores[other]
 
         def get_name(self):
-            return 'Herbert'
+            return 'James_Bond'
