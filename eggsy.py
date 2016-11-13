@@ -52,5 +52,5 @@ class MyAgent(Agent):
         other = (self.id + 1) % 2
         return scores[self.id] - scores[other]
 
-        def get_name(self):
-            return 'Eggsy'
+    def get_name(self):
+        return 'Eggsy'
