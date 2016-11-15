@@ -44,8 +44,9 @@ class MyAgent(Agent):
             for i in range(0, len(state.penguins)):
                 for j in range(0, len(state.penguins[i])):
                     if state.penguins[i][j] == self.id:
-                        for k in range(0, len(state.fish[i])):
-                            sum += state.fish[i][k]
+                        for move in state.get_moves(i, j):
+                            if state.penguins[move[0]][move[1]] == -1:
+                                sum += state.fish[move[0]][move[1]]
             return sum
 
         scores = state.get_scores()
