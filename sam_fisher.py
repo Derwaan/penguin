@@ -39,10 +39,15 @@ class MyAgent(Agent):
         pairs (a, s) in which a is the action played to reach the
         state s;
         """
+        ret = []
         for action in state.get_current_player_actions():
             copied_state = state.copy()
             copied_state.apply_action(action)
-            yield (action, copied_state)
+            ret.append((action, copied_state))
+
+        if(state.cur_player != self.id):
+            return sorted(ret, key=lambda x: self.evaluate(x[1]))
+        return sorted(ret, key=lambda x: self.evaluate(x[1]), reverse=True)
 
     def cutoff(self, state, depth):
         """The cutoff function returns true if the alpha-beta/minimax
